@@ -1,0 +1,23 @@
+[package]
+name = "RustCorrect"
+version = "0.1.0"
+authors = ["Josep Maria Salvia Hornos <josh.salvia@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+rustflags = ["debuginfo=0", "target-cpu=native"]
+
+[profile.dev]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+rustflags = ["debuginfo=0", "target-cpu=native"]
