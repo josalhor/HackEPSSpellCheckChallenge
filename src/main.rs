@@ -1,17 +1,18 @@
 use std::{cmp::min, collections::HashSet, convert::TryInto, fs::File, io::{self, BufRead, BufReader, Write}};
 
-fn lev(first: &str, second: &str) -> usize {
-    let b_len = second.chars().count();
+fn lev(first: &str, second: &str) -> i32 {
+    let second_len = second.chars().count() as i32;
     
-    let mut row: Vec<usize> = (1..b_len+1).collect();
-    let mut distance = 0;
+    let mut row: Vec<i32> = (1..second_len+1).collect();
+    let mut distance:i32 = 0;
 
     for (i1, e1) in first.chars().enumerate() {
+        let i1 = i1 as i32;
         distance = i1 + 1;
-        let mut distance_b = i1;
+        let mut distance_b:i32 = i1;
 
         for (i2, e2) in second.chars().enumerate() {
-            let distance_a = distance_b + (if e1 == e2 { 0 } else { 1 }) as usize;
+            let distance_a = distance_b + (if e1 == e2 { 0 } else { 1 });
             distance_b = row[i2];
             distance = min(distance + 1, min(distance_a, distance_b + 1));
             row[i2] = distance;
@@ -31,8 +32,8 @@ fn find_best<'a>(word: &'a str, d: &'a HashSet<String>) -> &'a str {
     for matching in d {
         let len_match:i32 = matching.chars().count().try_into().unwrap();
         let dif_size = (len_match - length_word).abs();
-        if dif_size > 5 {
-            continue; // probabilistic check
+        if dif_size > 5 || dif_size >= best_score {
+            continue; 
         }
         let score = lev(word, &matching);
         if score == 0 {
