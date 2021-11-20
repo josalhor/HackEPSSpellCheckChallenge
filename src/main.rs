@@ -1,4 +1,4 @@
-use std::{cmp::min, convert::TryInto, fs::File, io::{self, BufRead, BufReader, Write}};
+use std::{cmp::min, collections::HashSet, convert::TryInto, fs::File, io::{self, BufRead, BufReader, Write}};
 
 fn lev(first: &str, second: &str) -> usize {
     let b_len = second.chars().count();
@@ -21,9 +21,12 @@ fn lev(first: &str, second: &str) -> usize {
     distance
 }
 
-fn find_best<'a>(word: &str, d: &'a Vec<String>) -> &'a str {
+fn find_best<'a>(word: &'a str, d: &'a HashSet<String>) -> &'a str {
+    if d.contains(word) {
+        return word;
+    }
     let mut best_score = 999999;
-    let mut best_word: &str = &d[0];
+    let mut best_word: &str = d.iter().next().unwrap();
     let length_word:i32 = word.chars().count().try_into().unwrap();
     for matching in d {
         let len_match:i32 = matching.chars().count().try_into().unwrap();
@@ -46,10 +49,10 @@ fn find_best<'a>(word: &str, d: &'a Vec<String>) -> &'a str {
 fn main() {
     let d_file = File::open("dictionary.txt").unwrap();
     let d_reader = BufReader::new(d_file);
-    let mut d :Vec<String> = Vec::with_capacity(1024);
+    let mut d :HashSet<String> = HashSet::with_capacity(1024);
     for line in d_reader.lines() {
         let line = line.unwrap();
-        d.push(line);
+        d.insert(line);
     }
 
     let stdout = io::stdout();
