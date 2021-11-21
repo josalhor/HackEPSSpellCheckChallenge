@@ -12,3 +12,9 @@ RUSTFLAGS="-C opt-level=3 -C debuginfo=0 -C target-cpu=native" cargo build --rel
 ```
 
 Run the binary `RustCorrect` on `target/release/`
+
+## Notes
+
+This program is as correct as one can get.
+There may be a tie between some words, in which case the first match will be returned.
+This means there isn't a *single* possible solution.
