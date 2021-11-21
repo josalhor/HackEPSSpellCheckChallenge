@@ -103,8 +103,20 @@ fn main() {
     for line in d_input.lines() {
         let line = line.unwrap();
         for word in line.split_ascii_whitespace() {
-            let best_match = find_best(word, &dict, &ordered, len_shortest, len_longest);
+            let punct = word.as_bytes().last().unwrap();
+            let mut final_word = word;
+            let mut punct_byte :Option<u8> = None;
+            if *punct < 47 || (*punct < 65 && *punct > 57) {
+                let mut tmp_word = word.chars();
+                tmp_word.next_back();
+                final_word = tmp_word.as_str();
+                punct_byte = Some(*punct);
+            }
+            let best_match = find_best(final_word, &dict, &ordered, len_shortest, len_longest);
             let _ = stdout.write(best_match.as_bytes());
+            if punct_byte.is_some() {
+                let _ = stdout.write(&[punct_byte.unwrap()]);
+            }
             let _ = stdout.write(" ".as_bytes());
         }
         let _ = stdout.write("\n".as_bytes());
