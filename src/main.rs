@@ -19,6 +19,19 @@ fn lev(first: &str, second: &str) -> i32 {
         }
     }
     
+    /*
+    This gives a bias towards respecting the first letter of the word.
+    This is important because the chance of a mayus key happening at the
+    beginning of a word is low, but the letter gives really high predictability
+    on the word itself.
+    */
+    let first_c = first.chars().next().unwrap();
+    let second_c = second.chars().next().unwrap();
+
+    if (first_c.is_ascii_uppercase() || first.len() == 1) &&
+        first_c != second_c {
+        distance += 1;
+    }
     distance
 }
 
